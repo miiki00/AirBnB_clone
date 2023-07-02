@@ -9,6 +9,7 @@ import cmd
 import sys
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
@@ -17,7 +18,7 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = '(hbnb) '
-    classes = {"BaseModel": BaseModel}
+    classes = {'BaseModel': BaseModel, 'User': User}
 
     def emptyline(self):
         pass
@@ -27,7 +28,7 @@ class HBNBCommand(cmd.Cmd):
         return (True)
 
     def help_EOF(self):
-        h_msg = "(Ctrl-d) EOF : Quits out the shell program."
+        h_msg = '(Ctrl-d) EOF : Quits out the shell program.'
         print(h_msg)
 
     def do_quit(self, line):
@@ -37,14 +38,14 @@ class HBNBCommand(cmd.Cmd):
         return (True)
 
     def help_quit(self):
-        h_msg = "Quit : Quits out of the shell program."
+        h_msg = 'Quit : Quits out of the shell program.'
         print(h_msg)
 
     def do_create(self, line):
         if len(line) == 0:
-            print("** class name missing **")
+            print('** class name missing **')
         elif line not in HBNBCommand.classes.keys():
-            print("** class doesn't exist **")
+            print('** class doesn\'t exist **')
         else:
             obj = HBNBCommand.classes[line]()
             print(obj.id)
@@ -59,7 +60,7 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, line):
         args = HBNBCommand.arg_parser(line)
         if len(args) == 0:
-            print("** class name missing **")
+            print('** class name missing **')
         elif args[0] not in HBNBCommand.classes.keys():
             print("** class doesn't exist **")
         elif len(args) < 2:
