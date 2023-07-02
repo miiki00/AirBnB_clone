@@ -1,11 +1,13 @@
 #!/usr/bin/python3
-"""module: base_model
-This module contains the defination of the BaseModel class.
+"""
+base_model:
+    This module contains the defination of the BaseModel class.
 """
 
 
 import uuid
 from datetime import datetime
+from models import storage
 
 
 class BaseModel:
@@ -31,6 +33,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = self.created_at
+            storage.new(self)
 
     def __str__(self):
         return (f"[{type(self).__name__}] ({self.id}) <{self.__dict__}>")
@@ -41,6 +44,7 @@ class BaseModel:
               to the current time.
         """
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """
