@@ -36,7 +36,8 @@ class BaseModel:
             storage.new(self)
 
     def __str__(self):
-        return (f"[{type(self).__name__}] ({self.id}) {self.__dict__}")
+        s = "[{}] ({}) {}".format(type(self).__name__, self.id, self.__dict__)
+        return (s)
 
     def save(self):
         """
