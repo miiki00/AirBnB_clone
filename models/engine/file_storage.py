@@ -75,6 +75,9 @@ class FileStorage:
                         if _raw[key]['__class__'] == 'BaseModel':
                             from models.base_model import BaseModel
                             _raw[key] = BaseModel(**_raw[key])
+                        elif _raw[key]['__class__'] == 'User':
+                            from models.user import User
+                            _raw[key] = User(**_raw[key])
                     FileStorage.__objects = _raw
         except FileNotFoundError:
             pass
