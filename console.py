@@ -28,6 +28,11 @@ class HBNBCommand(cmd.Cmd):
         'City': City, 'Amenity': Amenity, 'Place': Place,
         'Review': Review
         }
+    err_msg = [
+        "** class name missing **", "** class doesn't exist **",
+        "** instance id missing **", "** no instance found **",
+        "** attribute name missing **", "** value missing **"
+        ]
 
     def emptyline(self):
         pass
@@ -53,9 +58,9 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line):
         if len(line) == 0:
-            print('** class name missing **')
+            print(HBNBCommand.err_msg[0])
         elif line not in HBNBCommand.classes.keys():
-            print('** class doesn\'t exist **')
+            print(HBNBCommand.err_msg[1])
         else:
             obj = HBNBCommand.classes[line]()
             print(obj.id)
@@ -70,20 +75,16 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, line):
         args = HBNBCommand.arg_parser(line)
         if len(args) == 0:
-            print('** class name missing **')
+            print(HBNBCommand.err_msg[0])
         elif args[0] not in HBNBCommand.classes.keys():
-            print("** class doesn't exist **")
+            print(HBNBCommand.err_msg[1])
         elif len(args) < 2:
-            print("** instance id missing **")
+            print(HBNBCommand.err_msg[2])
+        elif not HBNBCommand.check_cls_id(args[0], args[1]):
+            print(HBNBCommand.err_msg[3])
         else:
             objs = storage.all()
-            obj = None
-            try:
-                print(objs[f"{args[0]}.{args[1]}"])
-                return
-            except KeyError:
-                pass
-            print("** no instance found **")
+            print(objs[f"{args[0]}.{args[1]}"])
 
     def help_show(self):
         h_msg = """show <class> <object id>:
@@ -94,19 +95,16 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, line):
         args = HBNBCommand.arg_parser(line)
         if len(args) == 0:
-            print("** class name missing **")
+            print(HBNBCommand.err_msg[0])
         elif args[0] not in HBNBCommand.classes.keys():
-            print("** class doesn't exist **")
+            print(HBNBCommand.err_msg[1])
         elif len(args) < 2:
-            print("** instance id missing **")
+            print(HBNBCommand.err_msg[2])
+        elif not HBNBCommand.check_cls_id(args[0], args[1]):
+            print(HBNBCommand.err_msg[3])
         else:
-            try:
-                storage.all().pop(f"{args[0]}.{args[1]}")
-                storage.save()
-                return
-            except KeyError:
-                pass
-            print("** no instance found **")
+            storage.all().pop(f"{args[0]}.{args[1]}")
+            storage.save()
 
     def help_destroy(self):
         h_msg = """destroy <class> <object id>:
@@ -126,7 +124,7 @@ class HBNBCommand(cmd.Cmd):
                     found = True
                     print(objs[key])
         else:
-            print("** class doesn't exist **")
+            print(HBNBCommand.err_msg[1])
 
     def help_all(self):
         h_msg = """all {class} :
@@ -139,29 +137,24 @@ class HBNBCommand(cmd.Cmd):
         args = HBNBCommand.arg_parser(line)
         len_args = len(args)
         if len_args == 0:
-            print("** class name missing **")
+            print(HBNBCommand.err_msg[0])
         elif args[0] not in HBNBCommand.classes.keys():
-            print("** class doesn't exist **")
+            print(HBNBCommand.err_msg[1])
         elif len_args < 2:
-            print("** instance id missing **")
-        elif not HBNBCommand.check_id(args[1]):
-            print("** no instance found **")
+            print(HBNBCommand.err_msg[2])
+        elif not HBNBCommand.check_cls_id(args[0], args[1]):
+            print(HBNBCommand.err_msg[3])
         elif len_args < 3:
-            print("** attribute name missing **")
+            print(HBNBCommand.err_msg[4])
         elif len_args < 4:
-            print("** value missing **")
+            print(HBNBCommand.err_msg[5])
         else:
-            try:
-                obj = storage.all()[f"{args[0]}.{args[1]}"]
-                obj_dict = obj.to_dict()
-                if args[2] in obj_dict.keys():
-                    arg[3] = type(obj_dict[args[2]]).__class__(args[3])
-                setattr(obj, args[2], args[3])
-                storage.save()
-                return
-            except KeyError:
-                pass
-            print("** no instance found **")
+            obj = storage.all()[f"{args[0]}.{args[1]}"]
+            obj_dict = obj.to_dict()
+            if args[2] in obj_dict.keys():
+                arg[3] = type(obj_dict[args[2]]).__class__(args[3])
+            setattr(obj, args[2], args[3])
+            storage.save()
 
     def help_update(self):
         h_msg = """update <class> <object id> <attribute> <value>:
@@ -170,7 +163,7 @@ class HBNBCommand(cmd.Cmd):
         print(h_msg)
 
     @staticmethod
-    def check_id(id):
+    def check_cls_id(cls, id):
         """
         check_id: checks if an id exists in storage of objects.
 
@@ -184,9 +177,12 @@ class HBNBCommand(cmd.Cmd):
 
         objs = storage.all()
         found = False
-        for key in objs.keys():
-            if id == objs[key].id:
-                found = True
+
+        try:
+            obj = objs[f"{cls}.{id}"]
+            found = True
+        except KeyError:
+            pass
         return (found)
 
     @staticmethod
