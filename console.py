@@ -103,7 +103,7 @@ class HBNBCommand(cmd.Cmd):
         if len(line) == 0:
             for key in objs.keys():
                 print(objs[key])
-        elif line not in HBNBCommand.classes:
+        elif line in HBNBCommand.classes:
             found = False
             for key in objs.keys():
                 if line in key:
@@ -140,7 +140,7 @@ class HBNBCommand(cmd.Cmd):
             obj = storage.all()[f"{args[0]}.{args[1]}"]
             obj_dict = obj.to_dict()
             if args[2] in obj_dict.keys():
-                type(obj_dict[args[2]]).__class__(args[3])
+                arg[3] = type(obj_dict[args[2]]).__class__(args[3])
             setattr(obj, args[2], args[3])
             storage.save()
 
