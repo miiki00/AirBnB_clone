@@ -77,10 +77,12 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             objs = storage.all()
-            for key in objs.keys():
-                if args[1] == objs[key].id:
-                    print(objs[key])
-                    return
+            obj = None
+            try:
+                print(objs[f"{args[0]}.{args[1]}"])
+                return
+            except KeyError:
+                pass
             print("** no instance found **")
 
     def help_show(self):
