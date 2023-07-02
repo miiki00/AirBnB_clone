@@ -84,7 +84,7 @@ class HBNBCommand(cmd.Cmd):
             print(HBNBCommand.err_msg[3])
         else:
             objs = storage.all()
-            print(objs[f"{args[0]}.{args[1]}"])
+            print(objs["{}.{}".format(args[0], args[1])])
 
     def help_show(self):
         h_msg = """show <class> <object id>:
@@ -103,7 +103,7 @@ class HBNBCommand(cmd.Cmd):
         elif not HBNBCommand.check_cls_id(args[0], args[1]):
             print(HBNBCommand.err_msg[3])
         else:
-            storage.all().pop(f"{args[0]}.{args[1]}")
+            storage.all().pop("{}.{}".format(args[0], args[1]))
             storage.save()
 
     def help_destroy(self):
@@ -149,7 +149,7 @@ class HBNBCommand(cmd.Cmd):
         elif len_args < 4:
             print(HBNBCommand.err_msg[5])
         else:
-            obj = storage.all()[f"{args[0]}.{args[1]}"]
+            obj = storage.all()["{}.{}".format(args[0], args[1])]
             obj_dict = obj.to_dict()
             if args[2] in obj_dict.keys():
                 arg[3] = type(obj_dict[args[2]]).__class__(args[3])
@@ -179,7 +179,7 @@ class HBNBCommand(cmd.Cmd):
         found = False
 
         try:
-            obj = objs[f"{cls}.{id}"]
+            obj = objs["{}.{}".format(cls, id)]
             found = True
         except KeyError:
             pass
