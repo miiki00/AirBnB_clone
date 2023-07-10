@@ -1,3 +1,8 @@
+html {
+  position: relative;
+  min-height: 100%;
+  margin: 0 0 100px;
+}
 body {
   margin: 0;
   padding: 0;
