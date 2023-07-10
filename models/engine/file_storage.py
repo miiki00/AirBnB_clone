@@ -78,6 +78,21 @@ class FileStorage:
                         elif _raw[key]['__class__'] == 'User':
                             from models.user import User
                             _raw[key] = User(**_raw[key])
+                        elif _raw[key]['__class__'] == 'State':
+                            from models.state import State
+                            _raw[key] = State(**_raw[key])
+                        elif _raw[key]['__class__'] == 'City':
+                            from models.city import City
+                            _raw[key] = City(**_raw[key])
+                        elif _raw[key]['__class__'] == 'Amenity':
+                            from models.amenity import Amenity
+                            _raw[key] = Amenity(**_raw[key])
+                        elif _raw[key]['__class__'] == 'Place':
+                            from models.place import Place
+                            _raw[key] = Place(**_raw[key])
+                        elif _raw[key]['__class__'] == 'Review':
+                            from models.review import Review
+                            _raw[key] = Review(**_raw[key])
                     FileStorage.__objects = _raw
         except FileNotFoundError:
             pass
