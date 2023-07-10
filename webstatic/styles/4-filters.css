@@ -1,0 +1,29 @@
+/* Filter */
+
+.filter {
+  height: 70px;
+  width: 100%;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  background-color: white;
+}
+/* Search */
+
+.filter button {
+  width: 20%;
+  height: 48px;
+  font-size: 18px;
+  color: #ffffff;
+  border: 0;
+  border-radius: 5px;
+  margin: 11px 30px 0 77%;
+  background-color: #FF5A5F;
+}
+
+.filter button:hover {
+  opacity: 90%;
+}
+
+/* END Search */
+
+/* END Filter */
